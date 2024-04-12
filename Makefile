@@ -5,7 +5,9 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra
 SANITIZE = -g3 -fsanitize=address -fsanitize=leak
 
-SRC = src/ft_ping.c
+SRC = src/ft_ping.c            \
+      src/parse_program_args.c \
+      src/error.c
 OBJ = $(patsubst src/%.c, obj/%.o, $(SRC))
 
 INCLUDE = -I./inc
