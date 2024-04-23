@@ -6,7 +6,7 @@
 /*   By: aalvarez <aalvarez@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 10:32:28 by aalvarez          #+#    #+#             */
-/*   Updated: 2024/04/12 10:24:23 by aalvarez         ###   ########.fr       */
+/*   Updated: 2024/04/23 13:39:57 by aalvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,13 @@ void print_err_msg(int errnum) {
   fprintf(stderr, "%s\n", errors[errnum].err_msg);
 }
 
-void fatal_error() {
+void fatal_error(const char *failed, const char *msg) {
   free(params.dst_addrs);
-  perror("ft_ping");
+  params.dst_addrs = NULL;
+  fprintf(stderr, "ft_ping: ");
+  if (msg == NULL) {
+    perror(failed);
+  } else {
+    fprintf(stderr, "%s: %s\n", failed, msg);
+  }
 }

@@ -6,7 +6,7 @@
 /*   By: aalvarez <aalvarez@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 14:53:19 by aalvarez          #+#    #+#             */
-/*   Updated: 2024/04/12 10:18:23 by aalvarez         ###   ########.fr       */
+/*   Updated: 2024/04/23 12:16:06 by aalvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int set_program_addr_array(size_t size, char **addr_array) {
 
   params.dst_addrs = (char **)calloc(size + 1, sizeof(char *));
   if (!params.dst_addrs) {
-    fatal_error();
+    fatal_error("calloc", NULL);
     return EXIT_FAILURE;
   }
 

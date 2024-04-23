@@ -35,7 +35,7 @@ enum error_codes {
 extern const error_params errors[];
 
 void print_err_msg(int errnum);
-void fatal_error();
+void fatal_error(const char *failed, const char *msg);
 
 // 2. Program options and arguments related.
 
