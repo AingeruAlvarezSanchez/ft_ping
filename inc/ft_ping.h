@@ -6,14 +6,14 @@
 /*   By: aalvarez <aalvarez@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 14:58:58 by aalvarez          #+#    #+#             */
-/*   Updated: 2024/04/12 10:26:18 by aalvarez         ###   ########.fr       */
+/*   Updated: 2024/04/24 09:33:32 by aalvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PING_H
 #define FT_PING_H
-#include <stdint.h>
 #include <stdlib.h>
+#include <netdb.h>
 
 // 1. Program error related.
 
@@ -27,7 +27,8 @@ typedef struct {
 
 enum error_codes {
   DEST_REQUIRED,
-  HELP_MSG
+  ONLY_ONE_IP_TYPE,
+  HELP_MSG,
 };
 
 // "error_params" array containing all the possible error messages associated
@@ -45,6 +46,8 @@ typedef struct {
   uint64_t program_flags;
   // Array containing each target address specified by the user in the command line.
   char **dst_addrs;
+  // Array containing all the sockets corresponding to each host.
+  int  *sockets;
 } program_params;
 
 extern program_params params;
@@ -54,7 +57,14 @@ extern program_params params;
 // from '0' to '9', from 'a' to 'z' and from 'A' to 'Z'.
 
 // Allowed single-character flags, each character is a separate flag.
-#define ALLOWED_FLAGS "h?"
+#define ALLOWED_FLAGS "?46h"
+
+// Aliases for each configuration relevant flag, add here aliases
+// for your own flag implementations, be careful not to override
+// flags already implemented on "ALLOWED_FLAGS", as it may lead to
+// undefined behaviour.
+#define IPV4_FLAG 4
+#define IPV6_FLAG 6
 
 // Number of ascii characters between '9' and 'A'.
 #define UPPER_CASE_OFFSET 7
@@ -68,6 +78,21 @@ extern program_params params;
 #define SET_LOWER_FLAG(opt)   (params.program_flags |= (1ul << (opt - LOWER_CASE_OFFSET - '0')))
 #define SET_NUMERIC_FLAG(opt) (params.program_flags |= (1ul << (opt - '0')))
 
+// Checks if a certain flag identified by its
+// index on the bitset was set to true.
+#define IS_SET_FLAG(index)    ((params.program_flags >> index) & 1)
+
 int parse_program_args(int max_opts, char **opts_content);
+int configure_icmp(struct addrinfo **addrs, int max_hosts, char **hosts_addrs);
+
+// 3. Program echo request execution related.
+
+int icmp_requests(int max_hosts, char **hosts_addrs);
+
+// 4. Utils and program health related.
+
+// Wrapper function that ensures all the open sockets are closed
+// and all the addrinfo structs that were created are freed.
+int  clean_program(struct addrinfo **addrs, int max_hosts);
 
 #endif //FT_PING_H

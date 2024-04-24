@@ -20,11 +20,16 @@ char HELP_MSG_BUFF[] = {
     "  <destination>      dns name or ip address\n"
     "  -h                 print help and exit\n"
     "  -?                 behaves like \"-h\"\n"
+    "\nIPv4 options:\n"
+    "  -4                 use IPv4\n"
+    "\nIPv6 options:\n"
+    "  -6                 use IPv6\n"
     "\nFor more details see README."
 };
 
 const error_params errors[] = {
     {DEST_REQUIRED, "ft_ping: usage error: Destination address required"},
+    {ONLY_ONE_IP_TYPE, "ft_ping: only one -4 or -6 option may be specified"},
     {HELP_MSG, HELP_MSG_BUFF},
 };
 
