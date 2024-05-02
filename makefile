@@ -10,7 +10,8 @@ SRC = src/ft_ping.c            \
       src/error.c              \
       src/conf.c               \
       src/icmp.c               \
-      src/cleanup.c
+      src/cleanup.c            \
+      src/echo_requests.c
 OBJ = $(patsubst src/%.c, obj/%.o, $(SRC))
 
 INCLUDE = -I./inc

@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ping.c                                          :+:      :+:    :+:   */
+/*   echo_requests.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalvarez <aalvarez@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/09 14:58:51 by aalvarez          #+#    #+#             */
-/*   Updated: 2024/05/02 16:11:30 by aalvarez         ###   ########.fr       */
+/*   Created: 2024/04/24 12:46:48 by aalvarez          #+#    #+#             */
+/*   Updated: 2024/05/02 16:53:30 by aalvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <getopt.h>
+#include <stdio.h>
 #include "ft_ping.h"
 
-program_params params = {0, NULL, NULL, NULL, 0};
+//TODO docu
+static void display_ping_request(struct addrinfo *last_addr) {
+  printf("FT_PING %s (%s) %%d(%%d) bytes of data.\n", last_addr->ai_canonname, params.ip_str);
+}
 
-int main(int argc, char **argv) {
-  int ret_code;
-  if ((ret_code = parse_program_args(argc, argv)) != EXIT_SUCCESS) {
-    return ret_code;
+//TODO docu
+int icmp_echo_handler(struct addrinfo **addrs, int max_hosts) {
+  ip_hdr  ip_header;
+
+  if (configure_headers(addrs[max_hosts], &ip_header) != EXIT_SUCCESS) {
+    return EXIT_FAILURE;
   }
+  display_ping_request(addrs[max_hosts]);
 
-  if ((ret_code = icmp_requests(argc - optind, argv)) != EXIT_SUCCESS) {
-    free(params.dst_addrs);
-    return ret_code;
-  }
-
-  free(params.dst_addrs);
   return EXIT_SUCCESS;
 }

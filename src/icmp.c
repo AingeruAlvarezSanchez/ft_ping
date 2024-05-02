@@ -6,7 +6,7 @@
 /*   By: aalvarez <aalvarez@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 14:08:33 by aalvarez          #+#    #+#             */
-/*   Updated: 2024/04/24 09:32:43 by aalvarez         ###   ########.fr       */
+/*   Updated: 2024/04/24 13:00:47 by aalvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ int icmp_requests(int max_hosts, char **hosts_addrs) {
   params.sockets = sock_arr;
 
   int ret_code;
-  if ((ret_code = configure_icmp(addrs, max_hosts, hosts_addrs)) != EXIT_SUCCESS) {
+  if ((ret_code = configure_icmp(addrs, max_hosts, hosts_addrs)) != EXIT_SUCCESS
+        || (ret_code = icmp_echo_handler(addrs, max_hosts - 1)) != EXIT_SUCCESS) {
     clean_program(addrs, max_hosts);
     return ret_code;
   }

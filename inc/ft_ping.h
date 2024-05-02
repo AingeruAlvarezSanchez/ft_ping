@@ -6,7 +6,7 @@
 /*   By: aalvarez <aalvarez@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 14:58:58 by aalvarez          #+#    #+#             */
-/*   Updated: 2024/04/24 09:33:32 by aalvarez         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:30:08 by aalvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #define FT_PING_H
 #include <stdlib.h>
 #include <netdb.h>
+#include <netinet/ip.h>
+#include <netinet/ip6.h>
 
 // 1. Program error related.
 
@@ -48,7 +50,16 @@ typedef struct {
   char **dst_addrs;
   // Array containing all the sockets corresponding to each host.
   int  *sockets;
+  // Array containing the string representation of the IP number of the host to be pinged.
+  char *ip_str;
+  // The size of the payload to be sent in the request.
+  int payload_size;
 } program_params;
+
+typedef union {
+  struct ip6_hdr *ip6;
+  struct iphdr *ip4;
+} ip_hdr;
 
 extern program_params params;
 
@@ -84,9 +95,17 @@ extern program_params params;
 
 int parse_program_args(int max_opts, char **opts_content);
 int configure_icmp(struct addrinfo **addrs, int max_hosts, char **hosts_addrs);
+int configure_headers(struct addrinfo *last_addr, ip_hdr *ip_header);
 
 // 3. Program echo request execution related.
 
+#define IPV4_HEADER_SIZE 28
+#define IPV6_HEADER_SIZE 48
+#define DEFAULT_PAYLOAD_SIZE 56
+
+#define FT_PING_LOOP 1
+
+int icmp_echo_handler(struct addrinfo **addrs, int max_hosts);
 int icmp_requests(int max_hosts, char **hosts_addrs);
 
 // 4. Utils and program health related.
